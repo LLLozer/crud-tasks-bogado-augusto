@@ -1,26 +1,49 @@
 import Task from "../models/task.model.js"
 
-const createTask = async (req , res) => {
-    const task = req.body
-    try {
+//===========================//
+//      CREAR TAREA          //
+//===========================//
 
-        const createNewTask = await Task.create(task)
-        res.status(200).json(createNewTask)
+const createTask = async (req , res) => {
+    const { title } = req.body
+    try {
+        const checkIfTitleExists = await Task.findOne({ where: { title: title } })
+        if (checkIfTitleExists) {
+            res.status(400).json ({
+                message: "Error: Esa tarea ya existe",
+                error: "Bad request",
+                status: 400
+            })
+        }
+        const createNewTask = await Task.create(req.body)
+        res.status(200).json("Tarea creada")
     } catch (error) {
         res.status(500).json({ error: error.message })
     }
 }
+
+//===========================//
+// LISTAR TODAS LAS TAREAS   //
+//===========================//
 
 const findAllTasks = async (req , res) => {
         const find = await Task.findAll()
         res.status(200).json(find)
 }
 
+//===========================//
+//    LISTAR TAREA POR ID    //
+//===========================//
+
 const findTaskById = async (req , res) => {
     const taskID = parseInt(req.params.id)
     const findID = await Task.findByPk(taskID)
-    res.status(200).json(findID)
+    res.status(200).json("Listando todas las películas")
 }
+
+//===========================//
+//      ACTUALIZAR TAREA     //
+//===========================//
 
 const updateTask = async (req , res) => {
     const taskID = parseInt(req.params.id)
@@ -29,14 +52,14 @@ const updateTask = async (req , res) => {
         res.status(400).json ({
             message:"Error: El ID debe ser un número.",
             error:"Bad Request",
-            statusCode: "400"
+            statusCode: 400
         })
     }
     if (!title && !description) {
         res.status(400).json ({
             message: "Error: Algunos campos están vacíos.",
             error: "Bad request",
-            statusCode: "400"
+            statusCode: 400
         })
     }
     try {
@@ -45,25 +68,30 @@ const updateTask = async (req , res) => {
             res.status(404).json ({
                 message: "Error: Ese ID no existe.",
                 error: "Bad request",
-                statusCode: "404"
+                statusCode: 404
             })
         }
-        await findID.update({ title, description, isComplete})
         if (isComplete !== (true || false)) {
             res.status(400).json ({
                 message: "Error: isComplete debe ser booleano.",
                 error: "Bad request",
-                statusCode: "400"
+                statusCode: 400
             })
         }
+        await findID.update({ title, description, isComplete})
+        res.status(200).json("Datos actualizados")
     } catch (error) {
         res.status(400).json ({
             message: "Error: Error al actualizar los datos.",
             error: "Bad request",
-            statusCode: "400"
+            statusCode: 400
         })
     }
 }
+
+//===========================//
+//      ELIMINAR TAREA       //
+//===========================//
 
 const deleteTask = async (req , res) => {
     const taskID = parseInt(req.params.id)
@@ -71,7 +99,7 @@ const deleteTask = async (req , res) => {
         res.status(400).json ({
             message:"Error: El ID debe ser un número.",
             error:"Bad Request",
-            statusCode: "400"
+            statusCode: 400
         })
     }
     try {
@@ -80,7 +108,7 @@ const deleteTask = async (req , res) => {
             res.status(404).json ({
                 message: "Error: Ese ID no existe.",
                 error: "Bad request",
-                statusCode: "404"
+                statusCode: 404
             })
         }
         const deleteData = await findID.destroy()
