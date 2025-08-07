@@ -1,6 +1,6 @@
 import express from "express"
-import routerTask from "./src/routes/task-routes.js"
-import routerUser from "./src/routes/user-routes.js"
+import routerTask from "./src/routes/task.routes.js"
+import routerUser from "./src/routes/user.routes.js"
 import { DBStart } from "./src/config/database.js"
 const app = express
 const PORT = 3004
