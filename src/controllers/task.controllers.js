@@ -4,13 +4,20 @@ import Task from "../models/task.model.js"
 //      CREAR TAREA          //
 //===========================//
 
-const createTask = async (req , res) => {
-    const { title } = req.body
+export const createTask = async (req , res) => {
+    const { title , description } = req.body
     try {
         const checkIfTitleExists = await Task.findOne({ where: { title: title } })
         if (checkIfTitleExists) {
             res.status(400).json ({
                 message: "Error: Esa tarea ya existe",
+                error: "Bad request",
+                status: 400
+            })
+        }
+        if (req.body>100) {
+            res.status(400).json ({
+                message: "Error: El atributo no puede superar los 100 caracteres",
                 error: "Bad request",
                 status: 400
             })
@@ -26,7 +33,7 @@ const createTask = async (req , res) => {
 // LISTAR TODAS LAS TAREAS   //
 //===========================//
 
-const findAllTasks = async (req , res) => {
+export const findAllTasks = async (req , res) => {
         const find = await Task.findAll()
         res.status(200).json(find)
 }
@@ -35,7 +42,7 @@ const findAllTasks = async (req , res) => {
 //    LISTAR TAREA POR ID    //
 //===========================//
 
-const findTaskById = async (req , res) => {
+export const findTaskById = async (req , res) => {
     const taskID = parseInt(req.params.id)
     const findID = await Task.findByPk(taskID)
     res.status(200).json("Listando todas las películas")
@@ -45,7 +52,7 @@ const findTaskById = async (req , res) => {
 //      ACTUALIZAR TAREA     //
 //===========================//
 
-const updateTask = async (req , res) => {
+export const updateTask = async (req , res) => {
     const taskID = parseInt(req.params.id)
     const { title, description, isComplete } = req.body
     if (isNaN(taskID)) {
@@ -93,7 +100,7 @@ const updateTask = async (req , res) => {
 //      ELIMINAR TAREA       //
 //===========================//
 
-const deleteTask = async (req , res) => {
+export const deleteTask = async (req , res) => {
     const taskID = parseInt(req.params.id)
     if (isNaN(taskID)) {
         res.status(400).json ({
