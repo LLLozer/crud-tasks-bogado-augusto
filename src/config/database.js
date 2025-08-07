@@ -18,6 +18,6 @@ export const DBStart = async () => {
             console.log("Conexión exitosa a MySQL")
             await sequelize.sync()
         } catch (error) {
-            console.log("Error al conectar con MySQL")
+            console.log("Error al conectar con MySQL", error.message)
         }
     }
