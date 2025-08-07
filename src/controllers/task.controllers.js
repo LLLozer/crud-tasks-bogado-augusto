@@ -10,3 +10,14 @@ const createTask = async (req , res) => {
         res.status(500).json({ error: error.message })
     }
 }
+
+const findAllTasks = async (req , res) => {
+        const find = await Task.findAll()
+        res.status(200).json(find)
+}
+
+const findTaskById = async (req , res) => {
+    const taskID = parseInt(req.params.id)
+    const findID = await Task.findByPk(taskID)
+    res.status(200).json(findID)
+}
