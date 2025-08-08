@@ -16,7 +16,7 @@ export const createUser = async (req, res) => {
         const passwordLength = await password.length
         if (emailLength > 100 || nameLength > 100 || passwordLength > 100) {
             return res.status(400).json({
-                message: "Error: El atributo no puede superar los 100 caracteres",
+                message: "Error: Los atributos superan los 100 caracteres",
                 error: "Bad request",
                 status: 400
             })
@@ -65,4 +65,78 @@ export const findUserById = async (req, res) => {
         return res.status(500).json("Error: No se pudo encontrar el ID")
     }
 
+}
+
+export const updateUser = async (req, res) => {
+    const userID = parseInt(req.params.id)
+    const { name, email, password } = req.body
+    if (!name || !email || !password) {
+        return res.status(400).json({
+            message: "Error: Algunos campos están vacíos",
+            error: "Bad request",
+            status: 400
+        })
+    }
+    if (isNaN(userID)) {
+        return res.status(400).json({
+            message: "Error: El ID debe ser un número",
+            error: "Bad request",
+            status: 400
+        })
+    }
+    try {
+        const findID = await User.findByPk(userID)
+        if (!findID) {
+            return res.status(404).json({
+                message: "Error: Ese ID no existe",
+                error: "Not found",
+                status: 404
+            })
+        }
+        const checkIfTitleExists = await Task.findOne({ where: { title: title } })
+        if (checkIfTitleExists) {
+            return res.status(400).json({
+                message: "Error: Esa tarea ya existe",
+                error: "Bad request",
+                status: 400
+            })
+        }
+        await findID.update({ name, email, password })
+        res.status(200).json("Datos actualizados")
+    } catch (error) {
+        return res.status(500).json({
+            message: "Error: Error al actualizar usuario",
+            error: "Internal server error",
+            status: 500
+        })
+    }
+}
+
+export const deleteUser = async (req, res) => {
+    const userID = parseInt(req.params.id)
+    const findID = await User.findByPk(userID)
+    if (isNaN(userID)) {
+        return res.status(400).json({
+            message: "Error: El ID debe ser un número",
+            error: "Bad request",
+            status: 400
+        })
+    }
+    try {
+        if (!findID) {
+        return res.status(404).json({
+            message: "Error: Ese usuario no existe",
+            error: "Not found",
+            status: 404
+        })
+    }
+    const deleteData = await findID.destroy()
+    res.status(200).json("Usuario eliminado.")
+    } catch (error) {
+        return res(500).json({
+            message: "Error: Error al eliminar el usuario",
+            error: "Internal server error",
+            status: 500
+        })
+    }
 }

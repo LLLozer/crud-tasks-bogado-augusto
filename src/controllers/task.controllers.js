@@ -12,25 +12,26 @@ export const createTask = async (req, res) => {
             return res.status(400).json({
                 message: "Error: Esa tarea ya existe",
                 error: "Bad request",
-                status: 400
+                statusCode: 400
             })
         }
         const titleLength = await title.length
         const descriptionLength = await description.length
-        if (titleLength > 100) {
+        if (titleLength > 100 || descriptionLength > 100) {
             return res.status(400).json({
-                message: "Error: El atributo title no puede superar los 100 caracteres",
+                message: "Error: Hay atributos que superan los 100 caracteres",
                 error: "Bad request",
-                status: 400
+                statusCode: 400
             })
         }
+        /*
         if (descriptionLength > 100) {
             return res.status(400).json({
                 message: "Error: El atributo description no puede superar los 100 caracteres",
                 error: "Bad request",
                 status: 400
             })
-        }
+        }*/
         if (!title || !description) {
             return res.status(400).json({
                 message: "Error: Algunos campos están vacíos.",
@@ -122,13 +123,21 @@ export const updateTask = async (req, res) => {
                 statusCode: 400
             })
         }
+        const checkIfTitleExists = await Task.findOne({ where: { title: title } })
+        if (checkIfTitleExists) {
+            return res.status(400).json({
+                message: "Error: Esa tarea ya existe",
+                error: "Bad request",
+                statusCode: 400
+            })
+        }
         await findID.update({ title, description, isComplete })
         res.status(200).json("Datos actualizados")
     } catch (error) {
-        return res.status(400).json({
+        return res.status(500).json({
             message: "Error: Error al actualizar los datos.",
-            error: "Bad request",
-            statusCode: 400
+            error: "Internal server error",
+            statusCode: 500
         })
     }
 }
@@ -158,6 +167,10 @@ export const deleteTask = async (req, res) => {
         const deleteData = await findID.destroy()
         res.status(200).json("Tarea eliminada.")
     } catch (error) {
-        return res.status(400).json("Error al eliminar la tarea.")
+        return res.status(500).json({
+            message: "Error: Error al eliminar la tarea.",
+            error: "Internal server error",
+            statusCode: 500
+        })
     }
 }
