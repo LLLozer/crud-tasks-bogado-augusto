@@ -24,17 +24,16 @@ export const createTask = async (req, res) => {
                 statusCode: 400
             })
         }
-        /*
-        if (descriptionLength > 100) {
-            return res.status(400).json({
-                message: "Error: El atributo description no puede superar los 100 caracteres",
-                error: "Bad request",
-                status: 400
-            })
-        }*/
         if (!title || !description) {
             return res.status(400).json({
                 message: "Error: Algunos campos están vacíos.",
+                error: "Bad request",
+                statusCode: 400
+            })
+        }
+        if (isComplete !== (true || false)) {
+            return res.status(400).json({
+                message: "Error: isComplete debe ser booleano.",
                 error: "Bad request",
                 statusCode: 400
             })
@@ -93,6 +92,15 @@ export const findTaskById = async (req, res) => {
 export const updateTask = async (req, res) => {
     const taskID = parseInt(req.params.id)
     const { title, description, isComplete } = req.body
+    const titleLength = await title.length
+    const descriptionLength = await description.length
+    if (titleLength > 100 || descriptionLength > 100) {
+        return res.status(400).json({
+            message: "Error: Hay atributos que superan los 100 caracteres",
+            error: "Bad request",
+            statusCode: 400
+        })
+    }
     if (isNaN(taskID)) {
         return res.status(400).json({
             message: "Error: El ID debe ser un número.",

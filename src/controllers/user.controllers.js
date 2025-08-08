@@ -70,6 +70,16 @@ export const findUserById = async (req, res) => {
 export const updateUser = async (req, res) => {
     const userID = parseInt(req.params.id)
     const { name, email, password } = req.body
+    const emailLength = await email.length
+    const nameLength = await name.length
+    const passwordLength = await password.length
+    if (emailLength > 100 || nameLength > 100 || passwordLength > 100) {
+        return res.status(400).json({
+            message: "Error: Los atributos superan los 100 caracteres",
+            error: "Bad request",
+            status: 400
+        })
+    }
     if (!name || !email || !password) {
         return res.status(400).json({
             message: "Error: Algunos campos están vacíos",
@@ -93,10 +103,10 @@ export const updateUser = async (req, res) => {
                 status: 404
             })
         }
-        const checkIfTitleExists = await Task.findOne({ where: { title: title } })
-        if (checkIfTitleExists) {
+        const checkIfEmailExists = await User.findOne({ where: { email: email } })
+        if (checkIfEmailExists) {
             return res.status(400).json({
-                message: "Error: Esa tarea ya existe",
+                message: "Error: Ese usuario ya existe",
                 error: "Bad request",
                 status: 400
             })
@@ -124,14 +134,14 @@ export const deleteUser = async (req, res) => {
     }
     try {
         if (!findID) {
-        return res.status(404).json({
-            message: "Error: Ese usuario no existe",
-            error: "Not found",
-            status: 404
-        })
-    }
-    const deleteData = await findID.destroy()
-    res.status(200).json("Usuario eliminado.")
+            return res.status(404).json({
+                message: "Error: Ese usuario no existe",
+                error: "Not found",
+                status: 404
+            })
+        }
+        const deleteData = await findID.destroy()
+        res.status(200).json("Usuario eliminado.")
     } catch (error) {
         return res(500).json({
             message: "Error: Error al eliminar el usuario",
