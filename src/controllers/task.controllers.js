@@ -5,7 +5,7 @@ import Task from "../models/task.model.js"
 //===========================//
 
 export const createTask = async (req, res) => {
-    const { title, description } = req.body
+    const { title, description, isComplete } = req.body
     try {
         const checkIfTitleExists = await Task.findOne({ where: { title: title } })
         if (checkIfTitleExists) {
@@ -31,7 +31,7 @@ export const createTask = async (req, res) => {
                 statusCode: 400
             })
         }
-        if (isComplete !== (true || false)) {
+        if (typeof isComplete !== "boolean") {
             return res.status(400).json({
                 message: "Error: isComplete debe ser booleano.",
                 error: "Bad request",
