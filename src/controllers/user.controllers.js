@@ -1,5 +1,9 @@
 import User from "../models/user.model.js"
 
+//===========================//
+//      CREAR USUARIO        //
+//===========================//
+
 export const createUser = async (req, res) => {
     const { name, email, password } = req.body
     try {
@@ -35,10 +39,19 @@ export const createUser = async (req, res) => {
     }
 }
 
+//===========================//
+// LISTAR TODOS LOS USUARIOS //
+//===========================//
+
+
 export const findAllUsers = async (req, res) => {
     const findAll = await User.findAll()
     res.status(200).json(findAll)
 }
+
+//===========================//
+//    LISTAR USUARIO POR ID  //
+//===========================//
 
 export const findUserById = async (req, res) => {
     const userID = parseInt(req.params.id)
@@ -66,6 +79,10 @@ export const findUserById = async (req, res) => {
     }
 
 }
+
+//===========================//
+//      ACTUALIZAR USUARIO   //
+//===========================//
 
 export const updateUser = async (req, res) => {
     const userID = parseInt(req.params.id)
@@ -121,6 +138,10 @@ export const updateUser = async (req, res) => {
         })
     }
 }
+
+//===========================//
+//      ELIMINAR USUARIO     //
+//===========================//
 
 export const deleteUser = async (req, res) => {
     const userID = parseInt(req.params.id)
