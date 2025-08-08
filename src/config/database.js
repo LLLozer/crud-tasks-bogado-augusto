@@ -10,14 +10,14 @@ export const sequelize = new Sequelize(
         host: process.env.DB_HOST,
         dialect: process.env.DB_DIALECT,
     }
-    )
+)
 
 export const DBStart = async () => {
-        try {
-            await sequelize.authenticate()
-            console.log("Conexión exitosa a MySQL")
-            await sequelize.sync()
-        } catch (error) {
-            console.log("Error al conectar con MySQL", error.message)
-        }
+    try {
+        await sequelize.authenticate()
+        console.log("Conexión exitosa a MySQL")
+        await sequelize.sync()
+    } catch (error) {
+        console.log("Error al conectar con MySQL", error.message)
     }
+}
