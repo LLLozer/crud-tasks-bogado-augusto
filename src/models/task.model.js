@@ -1,7 +1,8 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/database.js";
+import { User } from "../models/user.model.js"
 
-const Task = sequelize.define(
+export const Task = sequelize.define(
   "Task",
   {
     id: {
@@ -12,7 +13,7 @@ const Task = sequelize.define(
     },
     title: { type: DataTypes.STRING(100), allowNull: false },
     description: { type: DataTypes.STRING(100), allowNull: false },
-    isComplete: {
+    is_complete: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
       allowNull: false,
@@ -23,4 +24,5 @@ const Task = sequelize.define(
   }
 );
 
-export default Task;
+User.hasMany(Task, { foreignKey: "author_id", as:"tasks"})
+Task.belongsTo(User, { foreignKey: "user_id", as:"user"})

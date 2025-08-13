@@ -1,4 +1,4 @@
-import Task from "../models/task.model.js"
+import {Task} from "../models/task.model.js"
 
 //===========================//
 //      CREAR TAREA          //
