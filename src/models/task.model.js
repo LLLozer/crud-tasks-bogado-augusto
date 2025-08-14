@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/database.js";
-import { User } from "../models/user.model.js"
+import { User } from "../models/user.model.js";
 
 export const Task = sequelize.define(
   "Task",
@@ -11,8 +11,14 @@ export const Task = sequelize.define(
       allowNull: false,
       autoIncrement: true,
     },
-    title: { type: DataTypes.STRING(100), allowNull: false },
-    description: { type: DataTypes.STRING(100), allowNull: false },
+    title: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+    },
+    description: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+    },
     is_complete: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
@@ -24,5 +30,5 @@ export const Task = sequelize.define(
   }
 );
 
-User.hasMany(Task, { foreignKey: "author_id", as:"tasks"})
-Task.belongsTo(User, { foreignKey: "user_id", as:"user"})
+User.hasMany(Task, { foreignKey: "user_id", as: "tasks" });
+Task.belongsTo(User, { foreignKey: "user_id" });
