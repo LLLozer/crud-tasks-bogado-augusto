@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/database.js";
-import { User } from "../models/user.model.js";
-import { Servers } from "../models/servers.model.js";
+import { User } from "../models/user.model.js"; // CAMBIAR LUEGO DE CREAR RUTAS Y CONTROLADORES//
+import { Servers } from "../models/servers.model.js"; // CAMBIAR LUEGO DE CREAR RUTAS Y CONTROLADORES//
 
 export const User_Server = sequelize.define(
   "User_Server",
