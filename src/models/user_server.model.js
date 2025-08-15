@@ -20,12 +20,12 @@ export const User_Server = sequelize.define(
 
 User.belongsToMany(Servers, {
   through: User_Server,
-  foreignKey: user_id,
+  foreignKey: "user_id",
   as: "servers",
 });
 
 Servers.belongsToMany(User, {
   through: User_Server,
-  foreignKey: server_id,
+  foreignKey: "server_id",
   as: "users",
 });

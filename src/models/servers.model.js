@@ -1,7 +1,8 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/database.js";
 
-export const Servers = sequelize.define("Servers", {
+export const Servers = sequelize.define("Servers", 
+  {
   id: {
     primaryKey: true,
     type: DataTypes.INTEGER,
@@ -20,4 +21,8 @@ export const Servers = sequelize.define("Servers", {
     type: DataTypes.INTEGER(10),
     allowNull: false,
   },
-});
+},
+  {
+    timestamps: false,
+  }
+);
