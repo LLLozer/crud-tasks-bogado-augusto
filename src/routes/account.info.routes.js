@@ -7,3 +7,5 @@ routerAccountInfo.get("/account_info", find_all_acounts)
 routerAccountInfo.get("/account_info/:id", find_acc_by_id)
 routerAccountInfo.put("/account_info/:id", update_account)
 routerAccountInfo.delete("/account_info/:id", delete_acc)
+
+export default routerAccountInfo

@@ -5,7 +5,7 @@ import {Task} from "../models/task.model.js"
 //===========================//
 
 export const createTask = async (req, res) => {
-    const { title, description, isComplete } = req.body
+    const { title, description, is_complete, user_id } = req.body
     try {
         const checkIfTitleExists = await Task.findOne({ where: { title: title } })
         if (checkIfTitleExists) {
@@ -31,9 +31,16 @@ export const createTask = async (req, res) => {
                 statusCode: 400
             })
         }
-        if (typeof isComplete !== "boolean") {
+        if (typeof is_complete !== "boolean") {
             return res.status(400).json({
                 message: "Error: isComplete debe ser booleano.",
+                error: "Bad request",
+                statusCode: 400
+            })
+        }
+        if (!user_id) {
+            return res.status(400).json({
+                message: "Se le debe asignar una tarea a un usuario",
                 error: "Bad request",
                 statusCode: 400
             })
