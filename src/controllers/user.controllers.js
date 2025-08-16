@@ -1,6 +1,6 @@
-import { Model } from "sequelize";
 import { User } from "../models/user.model.js";
 import { Task } from "../models/task.model.js";
+import { Servers } from "../models/servers.model.js";
 
 //===========================//
 //      CREAR USUARIO        //
@@ -49,6 +49,13 @@ export const findAllUsers = async (req, res) => {
   const findAll = await User.findAll({
     include: [
       {
+        model: Servers,
+        as: "servers",
+        through: {
+          attributes: [],
+        },
+      },
+      {
         model: Task,
         as: "tasks",
       },
@@ -74,6 +81,13 @@ export const findUserById = async (req, res) => {
 
     const findID = await User.findByPk(userID, {
       include: [
+        {
+          model: Servers,
+          as: "servers",
+          through: {
+            attributes: [],
+          },
+        },
         {
           model: Task,
           as: "tasks",

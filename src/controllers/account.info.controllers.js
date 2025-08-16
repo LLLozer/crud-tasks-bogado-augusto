@@ -1,4 +1,6 @@
 import { Account_Info } from "../models/account.info.model.js";
+import { User } from "../models/user.model.js";
+import { Task } from "../models/task.model.js";
 
 export const create_account = async (req, res) => {
   const { first_name, last_name, dni } = req.body;
@@ -34,7 +36,19 @@ export const create_account = async (req, res) => {
 };
 
 export const find_all_acounts = async (req, res) => {
-  const findAll = await Account_Info.findAll();
+  const findAll = await Account_Info.findAll({
+    include: [
+      {
+        model: User,
+        include: [
+          {
+            model: Task,
+            as: "tasks",
+          },
+        ]
+      },
+    ],
+  });
   res.status(200).json(findAll);
 };
 
@@ -48,7 +62,19 @@ export const find_acc_by_id = async (req, res) => {
         status: 400,
       });
     }
-    const find_id = await Account_Info.findByPk(acc_id);
+    const find_id = await Account_Info.findByPk(acc_id, {
+      include: [
+        {
+          model: User,
+          include: [
+            {
+              model: Task,
+              as: "tasks",
+            },
+          ],
+        },
+      ],
+    });
     if (!find_id) {
       return res.status(404).json({
         message: "Error: Ese ID no se ha encontrado",
@@ -56,7 +82,7 @@ export const find_acc_by_id = async (req, res) => {
         status: 404,
       });
     }
-    res.status(200).json(findID);
+    res.status(200).json(find_id);
   } catch (error) {
     return res.status(500).json("Error: No se pudo encontrar el ID");
   }
