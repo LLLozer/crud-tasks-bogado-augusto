@@ -1,9 +1,8 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/database.js";
-import { Account_Info } from "../models/account.info.model.js";
 
-export const User = sequelize.define(
-  "User",
+export const Account_Info = sequelize.define(
+  "Account_Info",
   {
     id: {
       primaryKey: true,
@@ -11,16 +10,16 @@ export const User = sequelize.define(
       allowNull: false,
       autoIncrement: true,
     },
-    name: {
+    first_name: {
       type: DataTypes.STRING(100),
       allowNull: false,
     },
-    email: {
+    last_name: {
       type: DataTypes.STRING(100),
       allowNull: false,
     },
-    password: {
-      type: DataTypes.STRING(100),
+    dni: {
+      type: DataTypes.INTEGER(8),
       allowNull: false,
     },
   },
@@ -28,6 +27,3 @@ export const User = sequelize.define(
     timestamps: false,
   }
 );
-
-User.belongsTo(Account_Info, { foreignKey: "account_id", as: "account" });
-Account_Info.hasOne(User, { foreignKey: "account_id" });
