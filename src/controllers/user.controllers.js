@@ -1,4 +1,6 @@
+import { Model } from "sequelize";
 import { User } from "../models/user.model.js";
+import { Task } from "../models/task.model.js";
 
 //===========================//
 //      CREAR USUARIO        //
@@ -44,7 +46,14 @@ export const createUser = async (req, res) => {
 //===========================//
 
 export const findAllUsers = async (req, res) => {
-  const findAll = await User.findAll();
+  const findAll = await User.findAll({
+    include: [
+      {
+        model: Task,
+        as: "tasks",
+      },
+    ],
+  });
   res.status(200).json(findAll);
 };
 
@@ -63,7 +72,14 @@ export const findUserById = async (req, res) => {
       });
     }
 
-    const findID = await User.findByPk(userID);
+    const findID = await User.findByPk(userID, {
+      include: [
+        {
+          model: Task,
+          as: "tasks",
+        },
+      ],
+    });
 
     if (!findID) {
       return res.status(404).json({
