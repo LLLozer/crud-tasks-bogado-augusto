@@ -6,45 +6,52 @@ import { User } from "../models/user.model.js";
 //===========================//
 
 export const createTask = async (req, res) => {
-    const { title, description } = req.body
-    try {
-        const checkIfTitleExists = await Task.findOne({ where: { title: title } })
-        if (checkIfTitleExists) {
-            return res.status(400).json({
-                message: "Error: Esa tarea ya existe",
-                error: "Bad request",
-                statusCode: 400
-            })
-        }
-        const titleLength = await title.length
-        const descriptionLength = await description.length
-        if (titleLength > 100 || descriptionLength > 100) {
-            return res.status(400).json({
-                message: "Error: Hay atributos que superan los 100 caracteres",
-                error: "Bad request",
-                statusCode: 400
-            })
-        }
-        if (!title || !description) {
-            return res.status(400).json({
-                message: "Error: Algunos campos están vacíos.",
-                error: "Bad request",
-                statusCode: 400
-            })
-        }
-        if (isComplete !== (true || false)) {
-            return res.status(400).json({
-                message: "Error: isComplete debe ser booleano.",
-                error: "Bad request",
-                statusCode: 400
-            })
-        }
-        const createNewTask = await Task.create(req.body)
-        res.status(200).json(createNewTask)
-    } catch (error) {
-        return res.status(500).json({ error: error.message })
+  const { title, description, is_complete, user_id } = req.body;
+  try {
+    const checkIfTitleExists = await Task.findOne({ where: { title: title } });
+    if (checkIfTitleExists) {
+      return res.status(400).json({
+        message: "Error: Esa tarea ya existe",
+        error: "Bad request",
+        statusCode: 400,
+      });
     }
-}
+    const titleLength = await title.length;
+    const descriptionLength = await description.length;
+    if (titleLength > 100 || descriptionLength > 100) {
+      return res.status(400).json({
+        message: "Error: Hay atributos que superan los 100 caracteres",
+        error: "Bad request",
+        statusCode: 400,
+      });
+    }
+    if (!title || !description) {
+      return res.status(400).json({
+        message: "Error: Algunos campos están vacíos.",
+        error: "Bad request",
+        statusCode: 400,
+      });
+    }
+    if (typeof is_complete !== "boolean") {
+      return res.status(400).json({
+        message: "Error: isComplete debe ser booleano.",
+        error: "Bad request",
+        statusCode: 400,
+      });
+    }
+    if (!user_id) {
+      return res.status(400).json({
+        message: "Se le debe asignar una tarea a un usuario",
+        error: "Bad request",
+        statusCode: 400,
+      });
+    }
+    const createNewTask = await Task.create(req.body);
+    res.status(200).json(createNewTask);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
 
 //===========================//
 // LISTAR TODAS LAS TAREAS   //
