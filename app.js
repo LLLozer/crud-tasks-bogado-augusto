@@ -4,6 +4,7 @@ import routerUser from "./src/routes/user.routes.js"
 import serverRouter from "./src/routes/servers.routes.js"
 import routerAccountInfo from "./src/routes/account.info.routes.js"
 import userServerRouter from "./src/routes/user_server.routes.js"
+import { DBStart } from "./src/config/database.js"
 const app = express()
 const PORT = 3004
 

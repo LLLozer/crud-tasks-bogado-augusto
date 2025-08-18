@@ -5,3 +5,5 @@ import { getAll, getById, createNewUserServer } from "../controllers/user_server
 userServerRouter.get("/user_server", getAll);
 userServerRouter.get("/user_server/:id", getById);
 userServerRouter.post("/user_server", createNewUserServer);
+
+export default userServerRouter;
