@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/database.js";
 
-export const Account_Info = sequelize.define(
+export const AccountInfo = sequelize.define(
   "Account_Info",
   {
     id: {
