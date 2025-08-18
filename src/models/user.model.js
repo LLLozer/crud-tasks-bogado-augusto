@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/database.js";
-import { Account_Info } from "../models/account.info.model.js";
+import { AccountInfo } from "../models/account.info.model.js";
 
 export const User = sequelize.define(
   "User",
@@ -29,5 +29,5 @@ export const User = sequelize.define(
   }
 );
 
-User.belongsTo(Account_Info, { foreignKey: "account_id", as: "account" });
-Account_Info.hasOne(User, { foreignKey: "account_id" });
+User.belongsTo(AccountInfo, { foreignKey: "account_id", as: "account" });
+AccountInfo.hasOne(User, { foreignKey: "account_id" });
