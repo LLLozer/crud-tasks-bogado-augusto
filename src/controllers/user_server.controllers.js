@@ -3,8 +3,22 @@ import { User } from "../models/user.model.js";
 import { Servers } from "../models/servers.model.js";
 
 export const getAll = async (req, res) => {
-  const getAllStuff = await UserServer.findAll();
+  try {
+  const getAllStuff = await UserServer.findAll({
+    include: [
+      {
+        model: User,
+        as: "users",
+      },
+      {
+        model: Servers,
+        as: "servers",
+      }
+  ]
+  });
   res.status(200).json(getAllStuff);
+  }
+ catch (error) {return res.status(500).json({error: error.message, message: "Internal server error"})}
 };
 
 export const getById = async (req, res) => {
