@@ -62,3 +62,88 @@ export const findServerById = async (req, res) => {
     return res.status(500).json("Error: No se pudo encontrar el ID");
   }
 };
+
+export const updateServer = async (req, res) => {
+  const serverID = parseInt(req.params.id);
+  const { members, server_name, levels } = req.body;
+  const serverNameLength = await server_name.length;
+  if (serverNameLength > 30) {
+    return res.status(400).json({
+      message:
+        "Error: El nombre del servidor no puede superar los 30 caracteres",
+      error: "Bad request",
+      statusCode: 400,
+    });
+  }
+  if (isNaN(serverID)) {
+    return res.status(400).json({
+      message: "Error: El ID debe ser un número.",
+      error: "Bad Request",
+      statusCode: 400,
+    });
+  }
+  if (!members && !server_name) {
+    return res.status(400).json({
+      message: "Error: Algunos campos están vacíos.",
+      error: "Bad request",
+      statusCode: 400,
+    });
+  }
+  try {
+    const findID = await Servers.findByPk(serverID);
+    if (!findID) {
+      return res.status(404).json({
+        message: "Error: Ese ID no existe.",
+        error: "Bad request",
+        statusCode: 404,
+      });
+    }
+    const checkIfServerExists = await Servers.findOne({
+      where: { server_name: server_name },
+    });
+    if (checkIfServerExists) {
+      return res.status(400).json({
+        message: "Error: Ese server ya existe",
+        error: "Bad request",
+        statusCode: 400,
+      });
+    }
+    await findID.update({ server_name, members, levels });
+    res.status(200).json("Datos actualizados");
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error: Error al actualizar los datos.",
+      error: "Internal server error",
+      statusCode: 500,
+    });
+  }
+};
+
+export const deleteServer = async (req, res) => {
+  const serverID = parseInt(req.params.id);
+  if (isNaN(serverID)) {
+    return res.status(400).json({
+      message: "Error: El ID debe ser un número.",
+      error: "Bad Request",
+      statusCode: 400,
+    });
+  }
+  try {
+    const findID = await Servers.findByPk(serverID);
+    if (!findID) {
+      return res.status(404).json({
+        message: "Error: Ese ID no existe.",
+        error: "Bad request",
+        statusCode: 404,
+      });
+    }
+    const deleteSv = await findID.destroy();
+    res.status(200).json("Server eliminado.");
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error: Error al eliminar el server.",
+      error: "Internal server error",
+      statusCode: 500,
+    });
+  }
+};
