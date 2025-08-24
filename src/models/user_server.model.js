@@ -14,7 +14,8 @@ export const UserServer = sequelize.define(
     },
   },
   {
-    timestamps: false,
+    timestamps: true,
+    paranoid: true,
   }
 );
 
