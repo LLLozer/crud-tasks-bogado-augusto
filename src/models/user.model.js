@@ -29,5 +29,5 @@ export const User = sequelize.define(
   }
 );
 
-User.belongsTo(AccountInfo, { foreignKey: "account_id", as: "account" });
-AccountInfo.hasOne(User, { foreignKey: "account_id" });
+User.belongsTo(AccountInfo, { foreignKey: "account_id", as: "account", onDelete: "CASCADE" });
+AccountInfo.hasOne(User, { foreignKey: "account_id", onDelete: "CASCADE" });
