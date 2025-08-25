@@ -5,12 +5,18 @@ import { Op } from "sequelize";
 export const createAccValidation = [
   body("first_name")
     .notEmpty()
+    .withMessage("El campo first_name debe ser obligatorio")
     .isString()
-    .withMessage("El campo first_name debe ser obligatorio"),
+    .isLength({ min: 2, max: 15 })
+    .withMessage("El first_name debe ser entre 2 y 15 caracteres"),
   body("last_name")
     .notEmpty()
+    .withMessage("El campo last_name debe ser obligatorio")
     .isString()
-    .withMessage("El campo last_name debe ser obligatorio"),
+    .isLength({ min: 2, max: 15 })
+    .withMessage(
+      "El campo last_name debe ser obligatorio y de 2 a 15 caracteres de longitud"
+    ),
   body("dni")
     .notEmpty()
     .withMessage("El campo dni debe ser obligatorio")
@@ -46,15 +52,14 @@ export const updateAccValidation = [
   body("first_name")
     .optional()
     .isString()
-    .withMessage("El campo name debe ser una cadena de caracteres")
-    .isLength({ min: 2, max: 10 })
-    .withMessage("El first_name debe ser entre 2 y 10 caracteres"),
+    .withMessage("El campo first_name debe ser una cadena de caracteres")
+    .isLength({ min: 2, max: 15 })
+    .withMessage("El first_name debe ser entre 2 y 15 caracteres"),
   body("last_name")
     .optional()
-    .notEmpty()
-    .isLength({ min: 2, max: 10 })
+    .isLength({ min: 2, max: 15 })
     .withMessage(
-      "El campo last_name debe ser obligatorio y de 2 a 10 caracteres de longitud"
+      "El campo last_name debe ser obligatorio y de 2 a 15 caracteres de longitud"
     ),
   body("dni")
     .optional()
