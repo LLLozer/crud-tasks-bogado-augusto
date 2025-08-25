@@ -8,14 +8,14 @@ export const createAccValidation = [
     .withMessage("El campo first_name debe ser obligatorio")
     .isString()
     .isLength({ min: 2, max: 15 })
-    .withMessage("El first_name debe ser entre 2 y 15 caracteres"),
+    .withMessage("El first_name debe ser de entre 2 y 15 caracteres"),
   body("last_name")
     .notEmpty()
     .withMessage("El campo last_name debe ser obligatorio")
     .isString()
     .isLength({ min: 2, max: 15 })
     .withMessage(
-      "El campo last_name debe ser obligatorio y de 2 a 15 caracteres de longitud"
+      "El campo last_name debe ser de entre 2 a 15 caracteres"
     ),
   body("dni")
     .notEmpty()
@@ -35,7 +35,7 @@ export const createAccValidation = [
       if (accountExists) {
         throw new Error("Ese DNI ya existe");
       }
-      return true;
+      //return true;//
     }),
 ];
 
