@@ -1,7 +1,7 @@
 import { Router } from "express"
 const routerUser = Router()
 import { findAllUsers, createUser, findUserById, updateUser, deleteUser } from "../controllers/user.controllers.js"
-import { createUserValidation, getUserIDValidation, updateUserValidation, deleteUserValidation} from "../middlewares/users.validation.js"
+import { createUserValidation, getUserIDValidation, updateUserValidation, deleteUserValidation} from "../middlewares/users.validations.js"
 import { validationResult } from "../middlewares/validator/validator.js"
 
 routerUser.get("/users", findAllUsers);
