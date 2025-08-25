@@ -51,7 +51,7 @@ export const updateTaskValidation = [
     .withMessage("El campo title debe ser una cadena de caracteres")
     .isLength({ min: 2, max: 100 })
     .withMessage("El title debe ser entre 2 y 100 caracteres")
-    .custom(async (value) => {
+    .custom(async (value, {req} ) => {
       const taskExists = await Task.findOne({
         where: { title: value, id: { [Op.ne]: req.params.id } },
       });

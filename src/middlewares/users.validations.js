@@ -56,7 +56,7 @@ export const updateUserValidation = [
     .isString()
     .isLength({ min: 2, max: 100 })
     .withMessage("El campo email debe ser de 2 a 100 caracteres")
-    .custom(async (value) => {
+    .custom(async (value, {req} ) => {
       const userExists = await User.findOne({
         where: { email: value, id: { [Op.ne]: req.params.id } },
       });

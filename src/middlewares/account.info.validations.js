@@ -71,7 +71,7 @@ export const updateAccValidation = [
       }
       return true;
     })
-    .custom(async (value) => {
+    .custom(async (value, {req} ) => {
       const accountExists = await AccountInfo.findOne({
         where: { dni: value, id: { [Op.ne]: req.params.id } },
       });

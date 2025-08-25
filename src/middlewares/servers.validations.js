@@ -48,7 +48,7 @@ export const updateServerValidation = [
     .isString()
     .isLength({ min: 2, max: 30 })
     .withMessage("El campo server_name debe ser de 2 a 30 caracteres")
-    .custom(async (value) => {
+    .custom(async (value, {req} ) => {
       const serverExists = await Servers.findOne({
         where: { server_name: value, id: { [Op.ne]: req.params.id } },
       });

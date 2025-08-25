@@ -34,7 +34,7 @@ export const createTask = async (req, res) => {
     }
     if (typeof is_complete !== "boolean") {
       return res.status(400).json({
-        message: "Error: isComplete debe ser booleano.",
+        message: "Error: is_complete debe ser booleano.",
         error: "Bad request",
         statusCode: 400,
       });
@@ -116,7 +116,7 @@ export const findTaskById = async (req, res) => {
 
 export const updateTask = async (req, res) => {
   const taskID = parseInt(req.params.id);
-  const { title, description, isComplete } = req.body;
+  const { title, description, is_complete } = req.body;
   const titleLength = await title.length;
   const descriptionLength = await description.length;
   if (titleLength > 100 || descriptionLength > 100) {
@@ -149,9 +149,9 @@ export const updateTask = async (req, res) => {
         statusCode: 404,
       });
     }
-    if (isComplete !== (true || false)) {
+    if (typeof is_complete !== "boolean") {
       return res.status(400).json({
-        message: "Error: isComplete debe ser booleano.",
+        message: "Error: is_complete debe ser booleano.",
         error: "Bad request",
         statusCode: 400,
       });
@@ -164,7 +164,7 @@ export const updateTask = async (req, res) => {
         statusCode: 400,
       });
     }
-    await findID.update({ title, description, isComplete });
+    await findID.update({ title, description, is_complete });
     res.status(200).json("Datos actualizados");
   } catch (error) {
     return res.status(500).json({
