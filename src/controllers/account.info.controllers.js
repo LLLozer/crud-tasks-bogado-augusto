@@ -1,6 +1,7 @@
 import { AccountInfo } from "../models/account.info.model.js";
 import { User } from "../models/user.model.js";
 import { Task } from "../models/task.model.js";
+import { matchedData } from "express-validator";
 
 export const createAccount = async (req, res) => {
   const { first_name, last_name, dni } = req.body;
@@ -28,6 +29,8 @@ export const createAccount = async (req, res) => {
         status: 400,
       });
     }
+    const validatedData = matchedData(req, { locations: ["body"] });
+    console.log("Los datos validados son:", validatedData);
     const createNewAccount = await AccountInfo.create(req.body);
     res.status(200).json(createNewAccount);
   } catch (error) {
@@ -45,7 +48,7 @@ export const findAllAccounts = async (req, res) => {
             model: Task,
             as: "tasks",
           },
-        ]
+        ],
       },
     ],
   });
@@ -122,6 +125,8 @@ export const updateAccount = async (req, res) => {
         status: 404,
       });
     }
+    const validatedData = matchedData(req, { locations: ["body"] });
+    console.log("Los datos validados son:", validatedData);
     await findId.update({ first_name, last_name, dni });
     res.status(200).json("Datos actualizados");
   } catch (error) {

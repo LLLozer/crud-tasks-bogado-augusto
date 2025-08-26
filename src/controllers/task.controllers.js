@@ -1,5 +1,6 @@
 import { Task } from "../models/task.model.js";
 import { User } from "../models/user.model.js";
+import { matchedData } from "express-validator";
 
 //===========================//
 //      CREAR TAREA          //
@@ -8,7 +9,9 @@ import { User } from "../models/user.model.js";
 export const createTask = async (req, res) => {
   const { title, description, is_complete, user_id } = req.body;
   try {
-    const checkIfTitleExists = await Task.findOne({ where: { title: title } });
+    const checkIfTitleExists = await Task.findOne({
+      where: { title: title, id: { [Op.ne]: id } },
+    });
     if (checkIfTitleExists) {
       return res.status(400).json({
         message: "Error: Esa tarea ya existe",
@@ -46,6 +49,8 @@ export const createTask = async (req, res) => {
         statusCode: 400,
       });
     }
+    const validatedData = matchedData(req, { locations: ["body"] });
+    console.log("Los datos validados son:", validatedData);
     const createNewTask = await Task.create(req.body);
     res.status(200).json(createNewTask);
   } catch (error) {
@@ -87,15 +92,15 @@ export const findTaskById = async (req, res) => {
       });
     }
     const findID = await Task.findByPk(taskID, {
-    include: [
-      {
-        model: User,
-        as: "User",
-        attributes: {
-          exclude: ["password", "email"]
-        }
-      }
-    ]
+      include: [
+        {
+          model: User,
+          as: "User",
+          attributes: {
+            exclude: ["password", "email"],
+          },
+        },
+      ],
     });
     if (!findID) {
       return res.status(404).json({
@@ -156,7 +161,9 @@ export const updateTask = async (req, res) => {
         statusCode: 400,
       });
     }
-    const checkIfTitleExists = await Task.findOne({ where: { title: title } });
+    const checkIfTitleExists = await Task.findOne({
+      where: { title: title, id: { [Op.ne]: id } },
+    });
     if (checkIfTitleExists) {
       return res.status(400).json({
         message: "Error: Esa tarea ya existe",
@@ -164,6 +171,8 @@ export const updateTask = async (req, res) => {
         statusCode: 400,
       });
     }
+    const validatedData = matchedData(req, { locations: ["body"] });
+    console.log("Los datos validados son:", validatedData);
     await findID.update({ title, description, is_complete });
     res.status(200).json("Datos actualizados");
   } catch (error) {

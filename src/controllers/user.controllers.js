@@ -9,7 +9,9 @@ import { Servers } from "../models/servers.model.js";
 export const createUser = async (req, res) => {
   const { name, email, password } = req.body;
   try {
-    const checkIfEmailExists = await User.findOne({ where: { email: email } });
+    const checkIfEmailExists = await User.findOne({
+      where: { email: email, id: { [Op.ne]: id } },
+    });
     if (checkIfEmailExists) {
       return res.status(400).json({
         message: "Error: Ese email ya existe",
@@ -148,7 +150,9 @@ export const updateUser = async (req, res) => {
         status: 404,
       });
     }
-    const checkIfEmailExists = await User.findOne({ where: { email: email } });
+    const checkIfEmailExists = await User.findOne({
+      where: { email: email, id: { [Op.ne]: id } },
+    });
     if (checkIfEmailExists) {
       return res.status(400).json({
         message: "Error: Ese usuario ya existe",

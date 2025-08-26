@@ -4,12 +4,14 @@ import { Op } from "sequelize";
 
 export const createAccValidation = [
   body("first_name")
+    .trim()
     .notEmpty()
     .withMessage("El campo first_name debe ser obligatorio")
     .isString()
     .isLength({ min: 2, max: 15 })
     .withMessage("El first_name debe ser de entre 2 y 15 caracteres"),
   body("last_name")
+    .trim()
     .notEmpty()
     .withMessage("El campo last_name debe ser obligatorio")
     .isString()
@@ -24,7 +26,7 @@ export const createAccValidation = [
     .withMessage("El campo DNI debe ser un numero entero positivo")
     .custom((value) => {
       if (value.toString().length < 8) {
-        throw new Error("El campo DNI debe tener al menos 8 digitos");
+        throw new Error("El campo DNI debe tener 8 dígitos");
       }
       return true;
     })
@@ -35,7 +37,7 @@ export const createAccValidation = [
       if (accountExists) {
         throw new Error("Ese DNI ya existe");
       }
-      //return true;//
+      return true;
     }),
 ];
 
@@ -50,13 +52,16 @@ export const updateAccValidation = [
       }
     }),
   body("first_name")
+    .trim()
     .optional()
     .isString()
     .withMessage("El campo first_name debe ser una cadena de caracteres")
     .isLength({ min: 2, max: 15 })
     .withMessage("El first_name debe ser entre 2 y 15 caracteres"),
   body("last_name")
+    .trim()
     .optional()
+    .isString()
     .isLength({ min: 2, max: 15 })
     .withMessage(
       "El campo last_name debe ser obligatorio y de 2 a 15 caracteres de longitud"
