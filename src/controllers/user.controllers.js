@@ -1,6 +1,7 @@
 import { User } from "../models/user.model.js";
 import { Task } from "../models/task.model.js";
 import { Servers } from "../models/servers.model.js";
+import { matchedData } from "express-validator";
 
 //===========================//
 //      CREAR USUARIO        //
@@ -36,6 +37,8 @@ export const createUser = async (req, res) => {
         status: 400,
       });
     }
+    const validatedData = matchedData(req, { locations: ["body"] });
+    console.log("Los datos validados son:", validatedData);
     const createNewUser = await User.create(req.body);
     res.status(200).json(createNewUser);
   } catch (error) {
@@ -160,6 +163,8 @@ export const updateUser = async (req, res) => {
         status: 400,
       });
     }
+    const validatedData = matchedData(req, { locations: ["body"] });
+    console.log("Los datos validados son:", validatedData);
     await findID.update({ name, email, password });
     res.status(200).json("Datos actualizados");
   } catch (error) {

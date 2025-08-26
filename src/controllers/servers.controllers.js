@@ -1,10 +1,11 @@
 import { Servers } from "../models/servers.model.js";
+import { matchedData } from "express-validator";
 
 export const createServer = async (req, res) => {
   const { members, server_name, levels } = req.body;
   try {
     const serverExists = await Servers.findOne({
-      where: { server_name: server_name },
+      where: { server_name: server_name, id: { [Op.ne]: id } },
     });
     if (serverExists) {
       return res.status(400).json({
@@ -27,6 +28,8 @@ export const createServer = async (req, res) => {
         status: 400,
       });
     }
+    const validatedData = matchedData(req, { locations: ["body"] });
+    console.log("Los datos validados son:", validatedData);
     const createNewServer = await Servers.create(req.body);
     res.status(200).json(createNewServer);
   } catch (error) {
@@ -99,7 +102,7 @@ export const updateServer = async (req, res) => {
       });
     }
     const checkIfServerExists = await Servers.findOne({
-      where: { server_name: server_name },
+      where: { server_name: server_name, id: { [Op.ne]: id } },
     });
     if (checkIfServerExists) {
       return res.status(400).json({
@@ -108,6 +111,8 @@ export const updateServer = async (req, res) => {
         statusCode: 400,
       });
     }
+    const validatedData = matchedData(req, { locations: ["body"] });
+    console.log("Los datos validados son:", validatedData);
     await findID.update({ server_name, members, levels });
     res.status(200).json("Datos actualizados");
   } catch (error) {
