@@ -4,12 +4,14 @@ import { Op } from "sequelize";
 
 export const createUserValidation = [
   body("name")
+    .trim()
     .notEmpty()
     .withMessage("El campo name debe ser obligatorio")
     .isString()
     .isLength({ min: 2, max: 100 })
     .withMessage("El nombre debe tener entre 2 y 100 caracteres"),
   body("email")
+    .trim()
     .notEmpty()
     .withMessage("El campo email debe ser obligatorio")
     .isString()
@@ -24,6 +26,7 @@ export const createUserValidation = [
       return true;
     }),
   body("password")
+    .trim()
     .notEmpty()
     .withMessage("El campo password debe ser obligatorio")
     .isString()
@@ -46,17 +49,19 @@ export const updateUserValidation = [
       }
     }),
   body("name")
+    .trim()
     .optional()
     .isString()
     .withMessage("El campo name debe ser una cadena de caracteres")
     .isLength({ min: 2, max: 100 })
     .withMessage("El name debe ser entre 2 y 100 caracteres"),
   body("email")
+    .trim()
     .optional()
     .isString()
     .isLength({ min: 2, max: 100 })
     .withMessage("El campo email debe ser de 2 a 100 caracteres")
-    .custom(async (value, {req} ) => {
+    .custom(async (value, { req }) => {
       const userExists = await User.findOne({
         where: { email: value, id: { [Op.ne]: req.params.id } },
       });
@@ -66,6 +71,7 @@ export const updateUserValidation = [
       return true;
     }),
   body("password")
+    .trim()
     .optional()
     .isString()
     .isLength({ min: 2, max: 100 })

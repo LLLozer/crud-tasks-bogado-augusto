@@ -4,6 +4,7 @@ import { Op } from "sequelize";
 
 export const createTaskValidation = [
   body("title")
+    .trim()
     .notEmpty()
     .withMessage("El campo title debe ser obligatorio")
     .isString()
@@ -19,6 +20,7 @@ export const createTaskValidation = [
       return true;
     }),
   body("description")
+    .trim()
     .notEmpty()
     .withMessage("El campo description debe ser obligatorio")
     .isString()
@@ -46,6 +48,7 @@ export const updateTaskValidation = [
       }
     }),
   body("title")
+    .trim()
     .optional()
     .isString()
     .withMessage("El campo title debe ser una cadena de caracteres")
@@ -61,6 +64,7 @@ export const updateTaskValidation = [
       return true;
     }),
   body("description")
+    .trim()
     .optional()
     .isString()
     .isLength({ min: 2, max: 100 })

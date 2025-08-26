@@ -9,6 +9,7 @@ export const createServerValidation = [
     .isInt({ min: 1, max: 100 })
     .withMessage("El campo members debe ser entero"),
   body("server_name")
+    .trim()
     .notEmpty()
     .withMessage("El campo server_name debe ser obligatorio")
     .isString()
@@ -44,6 +45,7 @@ export const updateServerValidation = [
     .isInt({ min: 1, max: 100 })
     .withMessage("El campo members debe ser un entero"),
   body("server_name")
+    .trim()
     .optional()
     .isString()
     .isLength({ min: 2, max: 30 })
